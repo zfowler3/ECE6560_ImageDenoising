@@ -24,6 +24,7 @@ for noise in types_of_noise:
         os.makedirs(results_dir)
     # iterate through all noisy images
     for img in imgs:
+        file = img.split(noise)[-1]
         converted_img = convert_img(img=img)
         current_params = params[noise]
         denoised = diffusion(img, iters=current_params['iters'], k=current_params['k'])
