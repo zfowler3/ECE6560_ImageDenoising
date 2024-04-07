@@ -13,6 +13,7 @@ def diffusion_coeff2(I, k):
 
 def diffusion(img, iters, k, lam=0.12, coeff=1):
 
+    img = img / 255
     img_new = np.zeros(img.shape, dtype=img.dtype)
 
     for step in range(iters):
