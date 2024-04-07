@@ -34,8 +34,6 @@ for noise in types_of_noise:
         current_params = params[noise]
         denoised = diffusion(converted_img, iters=current_params['iters'], k=current_params['k'])
         save_file = results_dir + file
-        #denoised = denoised.astype('uint8')
         plt.imshow(denoised, cmap='gray')
-        plt.show()
-        # denoised = Image.fromarray(denoised)
+        #plt.show()
         plt.imsave(save_file, denoised, cmap='gray')
