@@ -42,14 +42,11 @@ noises = ['gaussian', 's&p', 'shot']
 for noise in noises:
     # apply noise to all imgs
     for img in all_imgs:
-        print('? : ', img)
         if '.' in img:
             file_name = img
             updated_name = file_name.split('.')[0] + '_noise.' + file_name.split('.')[-1]
             updated_folder = updated_name.split('Images')[0] + 'Images/' + noise + '/'
-            print(updated_folder)
             updated_name = updated_folder + updated_name.split('Images')[-1][1:]
-            print(updated_name)
             if not os.path.exists(updated_folder):
                 os.makedirs(updated_folder)
             converted_img = convert_img(img)
