@@ -9,7 +9,10 @@ from scipy import ndimage
 
 def gaussian_noise(input_img, mean, var):
     noisy_img = ndimage.gaussian_filter(input=input_img, sigma=var)
-    #noisy_img = cv2.GaussianBlur(input_img, (8,8), 0)
+    return noisy_img
+
+def uniform_noise(input_img):
+    noisy_img = ndimage.uniform_filter(input=input_img)
     return noisy_img
 def salt_and_pepper(input_img):
     noisy_img = np.copy(input_img)
@@ -37,7 +40,7 @@ def shot_noise(input_img):
 img_folder = '/home/zoe/ECE6560_ImageDenoising/Images/'
 all_imgs = glob.glob(img_folder + '*')
 
-noises = ['gaussian', 's&p', 'shot']
+noises = ['gaussian', 's&p', 'shot', 'uniform']
 
 for noise in noises:
     # apply noise to all imgs
@@ -54,6 +57,8 @@ for noise in noises:
                 noisy_img = gaussian_noise(input_img=converted_img, mean=10, var=3)
             elif noise == 's&p':
                 noisy_img = salt_and_pepper(input_img=converted_img)
+            elif noise == 'uniform':
+                noisy_img = uniform_noise(input_img=converted_img)
             else:
                 noisy_img = shot_noise(input_img=converted_img)
 
