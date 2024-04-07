@@ -5,8 +5,9 @@ def diffusion_coeff1(I, k):
     inside = (I**2)/(k**2)
     return np.exp(-inside)
 
-def diffusion_coeff2(lam, b):
-    return np.exp(-1 * (np.power(lam, 2)) / (np.power(b, 2)))
+def diffusion_coeff2(I, k):
+    denom = 1 + (np.power(I, 2)/np.power(k, 2))
+    return 1/denom
 
 
 def anisodiff(im, steps, b, lam=0.25):  # takes image input, the number of iterations,
