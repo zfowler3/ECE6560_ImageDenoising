@@ -1,4 +1,5 @@
 import numpy as np
+
 def diffusion_coeff1(I, k):
     # exponential
     #np.exp(-1 * (np.power(lam, 2)) / (np.power(b, 2)))
@@ -10,16 +11,32 @@ def diffusion_coeff2(I, k):
     return 1/denom
 
 
-def anisodiff(im, steps, b, lam=0.25):  # takes image input, the number of iterations,
+def diffusion(img, iters, k, lam=0.25, coeff=1):
 
-    im_new = np.zeros(im.shape, dtype=im.dtype)
-    for t in range(steps):
-        dn = im[:-2, 1:-1] - im[1:-1, 1:-1]
-        ds = im[2:, 1:-1] - im[1:-1, 1:-1]
-        de = im[1:-1, 2:] - im[1:-1, 1:-1]
-        dw = im[1:-1, :-2] - im[1:-1, 1:-1]
-        im_new[1:-1, 1:-1] = im[1:-1, 1:-1] + \
-                             lam * (f(dn, b) * dn + f(ds, b) * ds +
-                                    f(de, b) * de + f(dw, b) * dw)
-        im = im_new
-    return im
+    img_new = np.zeros(img.shape, dtype=img.dtype)
+
+    for step in range(iters):
+
+        NORTH = img[:-2, 1:-1] - img[1:-1, 1:-1]
+
+        SOUTH = img[2:, 1:-1] - img[1:-1, 1:-1]
+
+        EAST = img[1:-1, 2:] - img[1:-1, 1:-1]
+
+        WEST = img[1:-1, :-2] - img[1:-1, 1:-1]
+
+        if coeff == 1:
+            img_new[1:-1, 1:-1] = img[1:-1, 1:-1] + \
+                                 lam * (diffusion_coeff1(NORTH, k) * NORTH +
+                                        diffusion_coeff1(SOUTH, k) * SOUTH +
+                                        diffusion_coeff1(EAST, k) * EAST +
+                                        diffusion_coeff1(WEST, k) * WEST)
+        else:
+            img_new[1:-1, 1:-1] = img[1:-1, 1:-1] + \
+                                 lam * (diffusion_coeff2(NORTH, k) * NORTH +
+                                        diffusion_coeff2(SOUTH, k) * SOUTH +
+                                        diffusion_coeff2(EAST, k) * EAST +
+                                        diffusion_coeff2(WEST, k) * WEST)
+        img = img_new
+
+    return img
