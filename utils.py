@@ -86,5 +86,5 @@ def convert_img(img):
     im = Image.open(img)
     im = im.convert('L')
     im = np.array(im)
-    im = im.astype(np.uint8)
+    im = im.astype('uint8')
     return im

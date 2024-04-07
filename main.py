@@ -1,18 +1,19 @@
 import os
 
 import imageio
+import matplotlib.pyplot as plt
 
 from Perona_Malik_Base import *
 import glob
 from utils import convert_img
-import Image
+from PIL import Image
 
 types_of_noise = ['gaussian', 'shot', 's&p']
 img_dir = '/home/zoe/ECE6560_ImageDenoising/Images/'
 params = {
-    'gaussian': {'iters': 60, 'k': 1},
-    'shot': {'iters': 60, 'k': 1},
-    's&p': {'iters': 60, 'k': 1}
+    'gaussian': {'iters': 80, 'k': .1},
+    'shot': {'iters': 80, 'k': .1},
+    's&p': {'iters': 80, 'k': .1}
 }
 
 for noise in types_of_noise:
@@ -31,8 +32,10 @@ for noise in types_of_noise:
         file = img.split(noise)[-1][1:]
         converted_img = convert_img(img=img)
         current_params = params[noise]
-        denoised = diffusion(img, iters=current_params['iters'], k=current_params['k'])
+        denoised = diffusion(converted_img, iters=current_params['iters'], k=current_params['k'])
         save_file = results_dir + file
-        denoised = denoised.astype('uint8')
-        denoised = Image.fromarray(denoised)
-        imageio.imwrite(save_file, denoised)
+        #denoised = denoised.astype('uint8')
+        plt.imshow(denoised, cmap='gray')
+        plt.show()
+        # denoised = Image.fromarray(denoised)
+        plt.imsave(save_file, denoised, cmap='gray')

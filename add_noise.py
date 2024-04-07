@@ -2,13 +2,14 @@ import glob
 import numpy as np
 import os
 from PIL import Image
+from skimage.util import random_noise
+
 from utils import convert_img
 import imageio
 from scipy import ndimage
 
-
 def gaussian_noise(input_img, mean, var):
-    noisy_img = ndimage.gaussian_filter(input=input_img, sigma=var)
+    noisy_img = random_noise(input_img, mode='gaussian', clip=True)*255
     return noisy_img
 
 def uniform_noise(input_img):
@@ -32,9 +33,10 @@ def salt_and_pepper(input_img):
     return noisy_img
 
 def shot_noise(input_img):
-    noisy = np.random.poisson(input_img / 255.0 * input_img.max()) / input_img.max() * 255
-    noisemap = np.ones((input_img.shape[0], input_img.shape[1])) * noisy.mean()
-    noisy_img = noisy+np.random.poisson(noisemap)
+    # noisy = np.random.poisson(input_img / 255.0 * input_img.max()) / input_img.max() * 255
+    # noisemap = np.ones((input_img.shape[0], input_img.shape[1])) * noisy.mean()
+    # noisy_img = noisy+np.random.poisson(noisemap)
+    noisy_img = np.random.poisson(lam=input_img)
     return noisy_img
 
 img_folder = '/home/zoe/ECE6560_ImageDenoising/Images/'
@@ -54,7 +56,7 @@ for noise in noises:
                 os.makedirs(updated_folder)
             converted_img = convert_img(img)
             if noise == 'gaussian':
-                noisy_img = gaussian_noise(input_img=converted_img, mean=10, var=3)
+                noisy_img = gaussian_noise(input_img=converted_img, mean=10, var=10)
             elif noise == 's&p':
                 noisy_img = salt_and_pepper(input_img=converted_img)
             elif noise == 'uniform':
@@ -63,7 +65,7 @@ for noise in noises:
                 noisy_img = shot_noise(input_img=converted_img)
 
             # Save image
-            print(noisy_img.dtype)
+            #print(noisy_img.dtype)
             noisy_img = noisy_img.astype('uint8')
             noisy_img = Image.fromarray(noisy_img)
             imageio.imwrite(updated_name, noisy_img)
