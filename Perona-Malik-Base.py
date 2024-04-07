@@ -11,7 +11,7 @@ def diffusion_coeff2(I, k):
     return 1/denom
 
 
-def diffusion(img, iters, k, lam=0.25, coeff=1):
+def diffusion(img, iters, k, lam=0.12, coeff=1):
 
     img_new = np.zeros(img.shape, dtype=img.dtype)
 
