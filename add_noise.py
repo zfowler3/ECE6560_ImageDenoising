@@ -1,9 +1,11 @@
 import glob
 from random import random
+
+import matplotlib.pyplot as plt
 from skimage.util import random_noise
 import numpy as np
 import os
-import PIL
+from PIL import Image
 from utils import convert_img
 
 
@@ -35,11 +37,6 @@ def shot_noise(input_img):
 img_folder = '/home/zoe/ECE6560_ImageDenoising/Images/'
 all_imgs = glob.glob(img_folder + '*')
 
-noise_folder = '/home/zoe/ECE6560_ImageDenoising/Images/Noise/'
-# Create folder if not already done
-if not os.path.exists(noise_folder):
-    os.makedirs(noise_folder)
-
 noises = ['gaussian', 's&p', 'shot']
 
 for noise in noises:
@@ -60,5 +57,9 @@ for noise in noises:
             noisy_img = shot_noise(input_img=converted_img)
 
         # Save image
-        act_img = PIL.Image.fromarray(noisy_img)
-        act_img.save(updated_name)
+        print(noisy_img.dtype)
+        act_img = Image.fromarray(noisy_img)
+        plt.imshow(act_img)
+        plt.show()
+        plt.imsave(act_img, updated_name)
+        #act_img.save(updated_name)
