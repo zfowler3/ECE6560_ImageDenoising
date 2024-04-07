@@ -1,7 +1,11 @@
 import os
+
+import imageio
+
 from Perona_Malik_Base import *
 import glob
 from utils import convert_img
+import Image
 
 types_of_noise = ['gaussian', 'shot', 's&p']
 img_dir = '/home/zoe/ECE6560_ImageDenoising/Images/'
@@ -29,3 +33,6 @@ for noise in types_of_noise:
         current_params = params[noise]
         denoised = diffusion(img, iters=current_params['iters'], k=current_params['k'])
         save_file = results_dir + file
+        denoised = denoised.astype('uint8')
+        denoised = Image.fromarray(denoised)
+        imageio.imwrite(save_file, denoised)
