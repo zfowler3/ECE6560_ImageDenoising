@@ -1,11 +1,9 @@
 import glob
-from skimage.util import random_noise
 import numpy as np
 import os
 from PIL import Image
 from utils import convert_img
 import imageio
-import cv2
 from scipy import ndimage
 
 
@@ -66,10 +64,4 @@ for noise in noises:
             print(noisy_img.dtype)
             noisy_img = noisy_img.astype('uint8')
             noisy_img = Image.fromarray(noisy_img)
-            #noisy_img = noisy_img.convert('L')
             imageio.imwrite(updated_name, noisy_img)
-        # act_img = Image.fromarray(noisy_img)
-        # plt.imshow(act_img)
-        # plt.show()
-        # plt.imsave(act_img, updated_name)
-        #act_img.save(updated_name)
