@@ -2,7 +2,6 @@ import numpy as np
 
 def diffusion_coeff1(I, k):
     # exponential
-    #np.exp(-1 * (np.power(lam, 2)) / (np.power(b, 2)))
     inside = (I**2)/(k**2)
     return np.exp(-inside)
 
