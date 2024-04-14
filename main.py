@@ -11,9 +11,9 @@ from PIL import Image
 types_of_noise = ['gaussian', 'shot', 's&p']
 img_dir = '/home/zoe/ECE6560_ImageDenoising/Images/'
 params = {
-    'gaussian': {'iters': 80, 'k': .1},
-    'shot': {'iters': 80, 'k': .1},
-    's&p': {'iters': 80, 'k': .1}
+    'gaussian': {'iters': 60, 'k': .1},
+    'shot': {'iters': 60, 'k': .1},
+    's&p': {'iters': 60, 'k': .1}
 }
 
 for noise in types_of_noise:

@@ -10,6 +10,10 @@ def diffusion_coeff2(I, k):
     denom = 1 + (np.power(I, 2)/np.power(k, 2))
     return 1/denom
 
+def custom_coeff(I, k):
+
+    return
+
 
 def diffusion(img, iters, k, lam=0.12, coeff=1):
     img = img / 255
