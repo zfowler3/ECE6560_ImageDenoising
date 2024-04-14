@@ -15,7 +15,7 @@ params = {
     'shot': {'iters': 30, 'k': .1},
     's&p': {'iters': 30, 'k': .1}
 }
-coeff = 1
+coeff = 3
 for noise in types_of_noise:
     print('----- Running experiment for ' + noise + ' Noise -----')
     # For each type of noise, run Perona-Malik
