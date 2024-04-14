@@ -11,8 +11,8 @@ def diffusion_coeff2(I, k):
     return 1/denom
 
 def custom_coeff(I, k):
-
-    return
+    inside = ((I*np.sqrt(3))/(k*np.sqrt(2)))**2
+    return np.exp(-inside)
 
 
 def diffusion(img, iters, k, lam=0.12, coeff=1):
@@ -35,12 +35,18 @@ def diffusion(img, iters, k, lam=0.12, coeff=1):
                                         diffusion_coeff1(SOUTH, k) * SOUTH +
                                         diffusion_coeff1(EAST, k) * EAST +
                                         diffusion_coeff1(WEST, k) * WEST)
-        else:
+        elif coeff == 2:
             img_new[1:-1, 1:-1] = img[1:-1, 1:-1] + \
                                  lam * (diffusion_coeff2(NORTH, k) * NORTH +
                                         diffusion_coeff2(SOUTH, k) * SOUTH +
                                         diffusion_coeff2(EAST, k) * EAST +
                                         diffusion_coeff2(WEST, k) * WEST)
+        else:
+            img_new[1:-1, 1:-1] = img[1:-1, 1:-1] + \
+                                 lam * (custom_coeff(NORTH, k) * NORTH +
+                                        custom_coeff(SOUTH, k) * SOUTH +
+                                        custom_coeff(EAST, k) * EAST +
+                                        custom_coeff(WEST, k) * WEST)
         img = img_new
 
     return img
