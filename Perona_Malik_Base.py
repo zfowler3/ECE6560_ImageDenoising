@@ -12,7 +12,7 @@ def diffusion_coeff2(I, k):
 
 def custom_coeff(I, k):
     inside = ((I*np.sqrt(3))/(k*np.sqrt(2)))**2
-    return np.exp(-inside)
+    return 0.6*np.exp(-inside)
 
 
 def diffusion(img, iters, k, lam=0.12, coeff=1):
