@@ -34,52 +34,33 @@ def second_deriv_y(I, i, j, delta=1):
     new = num / (delta**2)
     return new
 
+def Ixy_(I, i, j, deltax=1, deltay=1):
+    num = I[i+deltax, j+deltay] - I[i+deltax, j-deltay] - I[i-deltax, j+deltay] + I[i-deltax,j-deltay]
+    new = num/(4*deltax*deltay)
+    return new
 
-def diffusion_(img, iters, k=0.1, lam=0.12, coeff=1):
+
+def diffusion_equation(img, iters, k=.1):
 
     img = img / 255
-    img_new = np.zeros(img.shape, dtype=img.dtype)
-
-    for j in range(iters):
-
-        for i in range(1, iters-1):
-            Ix = first_deriv_x(img, i=i, j=j)
-            Iy = first_deriv_y(img, i=i, j=j)
-            Ixx = second_deriv_x(img, i=i, j=j)
-            Iyy = second_deriv_y(img, i=i, j=j)
-            exp_coef = (0.6/k**2)*np.exp((-3/(2*(k**2)))*(Ix**2+Iy**2))
-            a = 3/(k**2)
-            b = 6/(k**2)
-            inside = Ixx - a*(Ix**2)*Ixx - b*Ix*Iy*Ixy + Iyy - a*(Iy**2)*Iyy
-            img_new[i, j] += lam*(c)
-
-        # NORTH = img[:-2, 1:-1] - img[1:-1, 1:-1]
-        #
-        # SOUTH = img[2:, 1:-1] - img[1:-1, 1:-1]
-        #
-        # EAST = img[1:-1, 2:] - img[1:-1, 1:-1]
-        #
-        # WEST = img[1:-1, :-2] - img[1:-1, 1:-1]
-        #
-        # if coeff == 1:
-        #     img_new[1:-1, 1:-1] = img[1:-1, 1:-1] + \
-        #                          (diffusion_coeff1(NORTH, k) * NORTH +
-        #                                 diffusion_coeff1(SOUTH, k) * SOUTH +
-        #                                 diffusion_coeff1(EAST, k) * EAST +
-        #                                 diffusion_coeff1(WEST, k) * WEST)
-        # elif coeff == 2:
-        #     img_new[1:-1, 1:-1] = img[1:-1, 1:-1] + \
-        #                          (diffusion_coeff2(NORTH, k) * NORTH +
-        #                                 diffusion_coeff2(SOUTH, k) * SOUTH +
-        #                                 diffusion_coeff2(EAST, k) * EAST +
-        #                                 diffusion_coeff2(WEST, k) * WEST)
-        # else:
-        #     img_new[1:-1, 1:-1] = img[1:-1, 1:-1] + \
-        #                          (custom_coeff(NORTH, k) * NORTH +
-        #                                 custom_coeff(SOUTH, k) * SOUTH +
-        #                                 custom_coeff(EAST, k) * EAST +
-        #                                 custom_coeff(WEST, k) * WEST)
-        # img = img_new
+    dx = 1
+    dy = 1
+    for i in range(iters):
+        img_new = np.copy(img)
+        dt = 0.5
+        for i in range(dx, img.shape[0]-dx):
+            for j in range(dy, img.shape[1]-dy):
+                Ix = first_deriv_x(img_new, i, j)
+                Iy = first_deriv_y(img_new, i, j)
+                Ixx = second_deriv_x(img_new, i, j)
+                Iyy = second_deriv_y(img_new, i, j)
+                Ixy = Ixy_(img_new, i, j)
+                exp_coef = (0.6 / k ** 2) * np.exp((-3 / (2 * (k ** 2))) * (Ix ** 2 + Iy ** 2))
+                b = 6 / (k ** 2)
+                a = 3 / (k ** 2)
+                inside = Ixx - a * (Ix ** 2) * Ixx - b * Ix * Iy * Ixy + Iyy - a * (Iy ** 2) * Iyy
+                c = exp_coef * inside
+                img[i, j] = img_new[i, j] + dt*c
 
     return img
 

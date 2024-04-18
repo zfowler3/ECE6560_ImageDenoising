@@ -11,11 +11,11 @@ from PIL import Image
 types_of_noise = ['gaussian', 'shot', 's&p']
 img_dir = '/home/zoe/ECE6560_ImageDenoising/Images/'
 params = {
-    'gaussian': {'iters': 30, 'k': .1},
-    'shot': {'iters': 30, 'k': .1},
-    's&p': {'iters': 30, 'k': .1}
+    'gaussian': {'iters': 1, 'k': 1},
+    'shot': {'iters': 1, 'k': 1},
+    's&p': {'iters': 1, 'k': 1}
 }
-coeff = 3
+coeff = 1
 for noise in types_of_noise:
     print('----- Running experiment for ' + noise + ' Noise -----')
     # For each type of noise, run Perona-Malik
@@ -23,7 +23,7 @@ for noise in types_of_noise:
     # list all images
     imgs = glob.glob(img_dir_noise + '*')
     # results directory
-    results_dir = '/home/zoe/ECE6560_ImageDenoising/Results/coeff' + str(coeff) + '/'
+    results_dir = '/home/zoe/ECE6560_ImageDenoising/Results/TESTcoeff' + str(coeff) + '/'
     results_dir += noise + '/'
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
@@ -32,7 +32,7 @@ for noise in types_of_noise:
         file = img.split(noise)[-1][1:]
         converted_img = convert_img(img=img)
         current_params = params[noise]
-        denoised = diffusion(converted_img, iters=current_params['iters'], k=current_params['k'], coeff=coeff)
+        denoised = diffusion_(converted_img, iters=current_params['iters'], k=current_params['k'], coeff=coeff)
         save_file = results_dir + file
         plt.imshow(denoised, cmap='gray')
         #plt.show()
