@@ -15,7 +15,7 @@ params = {
     'shot': {'iters': 30, 'k': .1},
     's&p': {'iters': 30, 'k': .1}
 }
-coeff = 1
+coeff = 3
 for noise in types_of_noise:
     print('----- Running experiment for ' + noise + ' Noise -----')
     # For each type of noise, run Perona-Malik
@@ -23,7 +23,7 @@ for noise in types_of_noise:
     # list all images
     imgs = glob.glob(img_dir_noise + '*')
     # results directory
-    results_dir = '/home/zoe/ECE6560_ImageDenoising/Results/X_' + str(coeff) + '/'
+    results_dir = '/home/zoe/ECE6560_ImageDenoising/Results/coeff' + str(coeff) + '/'
     results_dir += noise + '/'
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)

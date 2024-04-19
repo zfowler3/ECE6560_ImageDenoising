@@ -64,7 +64,7 @@ def diffusion_equation(img, iters, k=.1):
 
     return img
 
-def diffusion_four_directions(img, iters, k, coeff=1):
+def diffusion_four_directions(img, iters, k, lam = 0.12, coeff=1):
     # normalize
     img = img / 255
     dx = 1
@@ -81,13 +81,13 @@ def diffusion_four_directions(img, iters, k, coeff=1):
         WEST = previous[dx:img.shape[0]-1, :img.shape[1]-2] - previous[dx:img.shape[0]-1, dy:img.shape[1]-1]
 
         if coeff == 1:
-            img[dx:img.shape[0]-1, dy:img.shape[1]-1] = previous[dx:img.shape[0]-1, dy:img.shape[1]-1] + (diffusion_coeff1(NORTH, k) * NORTH + diffusion_coeff1(SOUTH, k) * SOUTH + diffusion_coeff1(EAST, k) * EAST +
+            img[dx:img.shape[0]-1, dy:img.shape[1]-1] = previous[dx:img.shape[0]-1, dy:img.shape[1]-1] + lam*(diffusion_coeff1(NORTH, k) * NORTH + diffusion_coeff1(SOUTH, k) * SOUTH + diffusion_coeff1(EAST, k) * EAST +
                                         diffusion_coeff1(WEST, k) * WEST)
             
         elif coeff == 2:
-            img[dx:img.shape[0]-1, dy:img.shape[1]-1] = previous[dx:img.shape[0]-1, dy:img.shape[1]-1] + (diffusion_coeff2(NORTH, k) * NORTH +diffusion_coeff2(SOUTH, k) * SOUTH +diffusion_coeff2(EAST, k) * EAST + diffusion_coeff2(WEST, k) * WEST)
+            img[dx:img.shape[0]-1, dy:img.shape[1]-1] = previous[dx:img.shape[0]-1, dy:img.shape[1]-1] + lam*(diffusion_coeff2(NORTH, k) * NORTH +diffusion_coeff2(SOUTH, k) * SOUTH +diffusion_coeff2(EAST, k) * EAST + diffusion_coeff2(WEST, k) * WEST)
         else:
             img[dx:img.shape[0]-1, dy:img.shape[1]-1] = previous[dx:img.shape[0]-1, dy:img.shape[1]-1] + \
-                                 (custom_coeff(NORTH, k) * NORTH + custom_coeff(SOUTH, k) * SOUTH + custom_coeff(EAST, k) * EAST + custom_coeff(WEST, k) * WEST)
+                                 0.25*(custom_coeff(NORTH, k) * NORTH + custom_coeff(SOUTH, k) * SOUTH + custom_coeff(EAST, k) * EAST + custom_coeff(WEST, k) * WEST)
 
     return img
