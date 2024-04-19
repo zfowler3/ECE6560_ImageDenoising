@@ -65,38 +65,36 @@ def diffusion_equation(img, iters, k=.1):
     return img
 
 def diffusion_four_directions(img, iters, k, coeff=1):
-
+    # normalize
     img = img / 255
-    img_new = np.zeros(img.shape, dtype=img.dtype)
-
+    dx = 1
+    dy = 1
     for step in range(iters):
+        previous = np.copy(img)
 
-        NORTH = img[:-2, 1:-1] - img[1:-1, 1:-1]
+        NORTH = previous[:img.shape[0]-2, dy:img.shape[1]-1] - previous[dx:img.shape[0]-1, dy:img.shape[1]-1]
 
-        SOUTH = img[2:, 1:-1] - img[1:-1, 1:-1]
+        SOUTH = previous[(dx+1):, dy:img.shape[1]-1] - previous[dx:img.shape[0]-1, dy:img.shape[1]-1]
 
-        EAST = img[1:-1, 2:] - img[1:-1, 1:-1]
+        EAST = previous[dx:img.shape[0]-1, dy+1:] - previous[dx:img.shape[0]-1, dy:img.shape[1]-1]
 
-        WEST = img[1:-1, :-2] - img[1:-1, 1:-1]
+        WEST = previous[dx:img.shape[0]-1, :img.shape[1]-2] - previous[dx:img.shape[0]-1, dy:img.shape[1]-1]
 
         if coeff == 1:
-            img_new[1:-1, 1:-1] = img[1:-1, 1:-1] + \
-                                 (diffusion_coeff1(NORTH, k) * NORTH +
-                                        diffusion_coeff1(SOUTH, k) * SOUTH +
-                                        diffusion_coeff1(EAST, k) * EAST +
+            img[dx:img.shape[0]-1, dy:img.shape[1]-1] = previous[1:-1, 1:-1] + (diffusion_coeff1(NORTH, k) * NORTH + diffusion_coeff1(SOUTH, k) * SOUTH + diffusion_coeff1(EAST, k) * EAST +
                                         diffusion_coeff1(WEST, k) * WEST)
+            
         elif coeff == 2:
-            img_new[1:-1, 1:-1] = img[1:-1, 1:-1] + \
+            img[dx:img.shape[0]-1, dy:img.shape[1]-1] = previous[1:-1, 1:-1] + \
                                  (diffusion_coeff2(NORTH, k) * NORTH +
                                         diffusion_coeff2(SOUTH, k) * SOUTH +
                                         diffusion_coeff2(EAST, k) * EAST +
                                         diffusion_coeff2(WEST, k) * WEST)
         else:
-            img_new[1:-1, 1:-1] = img[1:-1, 1:-1] + \
+            img[dx:img.shape[0], dy:img.shape[1]] = previous[1:-1, 1:-1] + \
                                  (custom_coeff(NORTH, k) * NORTH +
                                         custom_coeff(SOUTH, k) * SOUTH +
                                         custom_coeff(EAST, k) * EAST +
                                         custom_coeff(WEST, k) * WEST)
-        img = img_new
 
     return img

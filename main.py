@@ -11,9 +11,9 @@ from PIL import Image
 types_of_noise = ['gaussian', 'shot', 's&p']
 img_dir = '/home/zoe/ECE6560_ImageDenoising/Images/'
 params = {
-    'gaussian': {'iters': 10, 'k': 1},
-    'shot': {'iters': 10, 'k': 1},
-    's&p': {'iters': 10, 'k': 1}
+    'gaussian': {'iters': 30, 'k': .1},
+    'shot': {'iters': 30, 'k': .1},
+    's&p': {'iters': 30, 'k': .1}
 }
 coeff = 1
 for noise in types_of_noise:
@@ -23,7 +23,7 @@ for noise in types_of_noise:
     # list all images
     imgs = glob.glob(img_dir_noise + '*')
     # results directory
-    results_dir = '/home/zoe/ECE6560_ImageDenoising/Results/discretized_' + str(coeff) + '/'
+    results_dir = '/home/zoe/ECE6560_ImageDenoising/Results/X_' + str(coeff) + '/'
     results_dir += noise + '/'
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
@@ -33,9 +33,9 @@ for noise in types_of_noise:
         converted_img = convert_img(img=img)
         current_params = params[noise]
         # first
-        denoised = diffusion_equation(converted_img, iters=current_params['iters'], k=current_params['k'])
+        #denoised = diffusion_equation(converted_img, iters=current_params['iters'], k=current_params['k'])
         #second
-        #denoised = diffusion_four_directions(converted_img, iters=current_params['iters'], k=current_params['k'], coeff=coeff)
+        denoised = diffusion_four_directions(converted_img, iters=current_params['iters'], k=current_params['k'], coeff=coeff)
         save_file = results_dir + file
         plt.imshow(denoised, cmap='gray')
         #plt.show()
