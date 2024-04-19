@@ -41,13 +41,13 @@ def Ixy_(I, i, j, deltax=1, deltay=1):
 
 
 def diffusion_equation(img, iters, k=.1):
-
+    ''' Custom diffusion update equation '''
     img = img / 255
     dx = 1
     dy = 1
     for i in range(iters):
         img_new = np.copy(img)
-        dt = 0.5
+        dt = 0.3
         for i in range(dx, img.shape[0]-dx):
             for j in range(dy, img.shape[1]-dy):
                 Ix = first_deriv_x(img_new, i, j)
@@ -64,8 +64,8 @@ def diffusion_equation(img, iters, k=.1):
 
     return img
 
-def diffusion(img, iters, k, coeff=1):
-    #http://image.diku.dk/imagecanon/material/PeronaMalik1990.pdf
+def diffusion_four_directions(img, iters, k, coeff=1):
+
     img = img / 255
     img_new = np.zeros(img.shape, dtype=img.dtype)
 
