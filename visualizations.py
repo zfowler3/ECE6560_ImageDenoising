@@ -1,6 +1,12 @@
+import glob
+
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.lines as mlines
+
+from utils import *
+
+
 def custom_coeff(I, k=0.1):
     inside = ((I*np.sqrt(3))/(k*np.sqrt(2)))**2
     return (0.04+0.2*np.exp(-inside))
@@ -34,4 +40,32 @@ def coeff_vs_grad():
     plt.show()
     return
 
-coeff_vs_grad()
+def return_metrics():
+    coeffs = ['coeff1', 'coeff3']
+    noises = ['gaussian', 'shot', 's&p']
+    metrics = ['ssim', 'psnr', 'fsim', 'mse']
+    img_dir = '/home/zoe/ECE6560_ImageDenoising/Images/Clean/'
+    results_ = '/home/zoe/ECE6560_ImageDenoising/Results/'
+    imgs = glob.glob(img_dir + '*')
+    for c in coeffs:
+        results_dir = results_ + c + '/'
+        print('-------------------------')
+        print('COEFFICIENT: ', c)
+        for i in imgs:
+            img = convert_img(i)
+            img_name = i.split('/')[-1].split('.')[0]
+            ext = i.split('/')[-1].split('.')[-1]
+            print('Image: ', img_name)
+            for noise in noises:
+                print('*****')
+                print('Noise: ', noise)
+                result_img_name = results_dir + noise + '/' + img_name + '_noise.' + ext
+                result_img = convert_img(result_img_name)
+                for m in metrics:
+                    metric_ = compare_image(img, result_img, type=m)
+                    print('Metric ' + m + ' ... ' + str(metric_))
+
+    return
+
+#coeff_vs_grad()
+return_metrics()
